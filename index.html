@@ -8,18 +8,18 @@
 
 <style>
 body{
-font-family: Arial, sans-serif;
-background:#f5f5f5;
+font-family:Arial,sans-serif;
+background:#f4f4f4;
 margin:0;
 padding:20px;
 }
 
 .container{
-max-width:600px;
+max-width:700px;
 margin:auto;
 background:white;
-padding:20px;
-border-radius:12px;
+padding:25px;
+border-radius:15px;
 box-shadow:0 0 15px rgba(0,0,0,0.1);
 }
 
@@ -35,23 +35,25 @@ margin-bottom:20px;
 }
 
 .info{
-background:#f0f8ff;
+background:#f8f8f8;
 padding:15px;
-border-radius:8px;
+border-radius:10px;
+line-height:1.8;
 margin-bottom:20px;
 }
 
 label{
 font-weight:bold;
+display:block;
+margin-bottom:5px;
 }
 
-input, select, textarea{
+input,select,textarea{
 width:100%;
 padding:12px;
-margin-top:5px;
 margin-bottom:15px;
 border:1px solid #ccc;
-border-radius:6px;
+border-radius:8px;
 box-sizing:border-box;
 }
 
@@ -60,19 +62,22 @@ width:100%;
 padding:15px;
 background:#25D366;
 color:white;
-border:none;
-border-radius:8px;
 font-size:18px;
+border:none;
+border-radius:10px;
 cursor:pointer;
 }
 
-button:hover{
-opacity:0.9;
+#infoHarga{
+background:#fff8e1;
+padding:15px;
+border-radius:10px;
+line-height:1.8;
+margin-bottom:20px;
 }
 </style>
 
 </head>
-
 <body>
 
 <div class="container">
@@ -85,68 +90,201 @@ Apartemen Green Pramuka Jakarta Pusat
 
 <div class="info">
 ✅ Transit Mulai 2 Jam<br>
-✅ Harian & Mingguan<br>
+✅ Harian & Fullday<br>
 ✅ Full Furnished<br>
-✅ AC & TV<br>
+✅ AC<br>
+✅ TV<br>
 ✅ Water Heater<br>
-✅ Dekat Mall Green Pramuka Square
+✅ Aman, Nyaman & Bersih
 </div>
 
-<label>Nama Pemesan</label> <input type="text" id="nama" placeholder="Masukkan Nama">
+<label>Nama Pemesan</label> <input type="text" id="nama">
 
-<label>Tipe Unit</label> <select id="unit">
+<label>Tipe Unit</label> <select id="unit" onchange="cekHarga()">
 
-<option>Studio</option>
-<option>2 Bedroom</option>
+<option value="Studio">Studio</option>
+<option value="2 BR">2 BR</option>
 </select>
 
-<label>Tanggal Check In</label> <input type="date" id="tanggal">
+<label>Tanggal Check In</label> <input type="date" id="tanggal" onchange="cekHarga()">
 
-<label>Pilih Paket</label> <select id="paket">
+<label>Jam Check In</label> <input type="time" id="jam">
 
-<option>2 Jam - Rp100.000</option>
-<option>3 Jam + Free 1 Jam - Rp150.000</option>
-<option>6 Jam + Free 1 Jam - Rp200.000</option>
-<option>9 Jam + Free 1 Jam - Rp250.000</option>
-<option>12 Jam + Free 1 Jam - Rp300.000</option>
-</select>
+<label>Pilih Paket</label> <select id="paket"></select>
+
+<div id="infoHarga">
+Pilih tanggal terlebih dahulu.
+</div>
 
 <label>Catatan</label>
 
 <textarea id="catatan" rows="4"></textarea>
 
 <button onclick="booking()">
-Booking Via WhatsApp
+📲 Booking Via WhatsApp
 </button>
 
 </div>
 
 <script>
 
+function cekHarga(){
+
+let tanggal=document.getElementById("tanggal").value;
+let unit=document.getElementById("unit").value;
+
+if(!tanggal) return;
+
+let hari=new Date(tanggal).getDay();
+let weekend=(hari===0 || hari===6);
+
+let paket=document.getElementById("paket");
+let info=document.getElementById("infoHarga");
+
+if(unit==="Studio"){
+
+if(weekend){
+
+paket.innerHTML=`
+<option>2 Jam - Rp150.000</option>
+<option>3 Jam - Rp200.000</option>
+<option>6 Jam - Rp250.000</option>
+<option>9 Jam - Rp300.000</option>
+<option>12 Jam - Rp350.000</option>
+`;
+
+info.innerHTML=`
+<b>📣 PROMO WEEKEND - STUDIO</b><br><br>
+
+2 Jam Rp150.000<br>
+3 Jam Rp200.000<br>
+6 Jam Rp250.000<br>
+9 Jam Rp300.000<br>
+12 Jam Rp350.000
+`;
+
+}else{
+
+paket.innerHTML=`
+<option>2 Jam - Rp100.000</option>
+<option>3 Jam + Free 1 Jam - Rp150.000</option>
+<option>6 Jam + Free 1 Jam - Rp200.000</option>
+<option>9 Jam + Free 1 Jam - Rp250.000</option>
+<option>12 Jam + Free 1 Jam - Rp300.000</option>
+<option>24 Jam - Rp400.000</option>
+<option>Fullday - Rp350.000</option>
+<option>Promo Malam (21:00-12:00) - Rp250.000</option>
+`;
+
+info.innerHTML=`
+<b>📣 PROMO WEEKDAY - STUDIO</b><br><br>
+
+2 Jam Rp100.000<br>
+3 Jam + Free 1 Jam Rp150.000<br>
+6 Jam + Free 1 Jam Rp200.000<br>
+9 Jam + Free 1 Jam Rp250.000<br>
+12 Jam + Free 1 Jam Rp300.000<br>
+24 Jam Rp400.000<br>
+Fullday Rp350.000<br><br>
+
+<b>🔥 PAKET LAINNYA</b><br>
+Promo Malam (21:00-12:00) Rp250.000<br>
+(Hanya Berlaku Saat Weekday)<br><br>
+
+Fasilitas Lengkap<br>
+Dijamin Aman Nyaman dan Bersih.
+`;
+
+}
+
+}else{
+
+if(weekend){
+
+paket.innerHTML=`
+<option>2 Jam - Rp200.000</option>
+<option>3 Jam - Rp250.000</option>
+<option>6 Jam - Rp300.000</option>
+<option>9 Jam - Rp350.000</option>
+<option>12 Jam - Rp400.000</option>
+<option>24 Jam - Rp500.000</option>
+<option>Fullday - Rp450.000</option>
+`;
+
+info.innerHTML=`
+<b>📣 PROMO WEEKEND - 2 BR</b><br><br>
+
+2 Jam Rp200.000<br>
+3 Jam Rp250.000<br>
+6 Jam Rp300.000<br>
+9 Jam Rp350.000<br>
+12 Jam Rp400.000<br>
+24 Jam Rp500.000<br>
+Fullday Rp450.000
+`;
+
+}else{
+
+paket.innerHTML=`
+<option>2 Jam - Rp150.000</option>
+<option>3 Jam - Rp200.000</option>
+<option>6 Jam - Rp250.000</option>
+<option>9 Jam - Rp300.000</option>
+<option>12 Jam - Rp350.000</option>
+<option>24 Jam - Rp450.000</option>
+<option>Fullday - Rp400.000</option>
+<option>Promo Malam (21:00-12:00) - Rp300.000</option>
+`;
+
+info.innerHTML=`
+<b>📣 PROMO WEEKDAY - 2 BR</b><br><br>
+
+2 Jam Rp150.000<br>
+3 Jam Rp200.000<br>
+6 Jam Rp250.000<br>
+9 Jam Rp300.000<br>
+12 Jam Rp350.000<br>
+24 Jam Rp450.000<br>
+Fullday Rp400.000<br><br>
+
+<b>🔥 PAKET LAINNYA</b><br>
+Promo Malam (21:00-12:00) Rp300.000<br>
+(Berlaku Saat Weekday)<br><br>
+
+Fasilitas Lengkap<br>
+Dijamin Aman Nyaman dan Bersih.
+`;
+
+}
+
+}
+
+}
+
 function booking(){
 
-let nama = document.getElementById("nama").value;
-let unit = document.getElementById("unit").value;
-let tanggal = document.getElementById("tanggal").value;
-let paket = document.getElementById("paket").value;
-let catatan = document.getElementById("catatan").value;
+let nama=document.getElementById("nama").value;
+let unit=document.getElementById("unit").value;
+let tanggal=document.getElementById("tanggal").value;
+let jam=document.getElementById("jam").value;
+let paket=document.getElementById("paket").value;
+let catatan=document.getElementById("catatan").value;
 
-let pesan =
-`Halo Admin DS ROOM
+let pesan=`Halo Admin DS ROOM
 
-Saya ingin booking:
+Saya ingin booking Apartemen Green Pramuka Jakarta Pusat
 
-Nama: ${nama}
-Tipe Unit: ${unit}
-Tanggal Check In: ${tanggal}
-Paket: ${paket}
+Nama : ${nama}
+Tipe Unit : ${unit}
+Tanggal Check In : ${tanggal}
+Jam Check In : ${jam}
+Paket : ${paket}
 
-Catatan:
+Catatan :
 ${catatan}`;
 
 window.open(
-"https://wa.me/62881025212183?text=" +
-encodeURIComponent(pesan),
+"https://wa.me/62881025212183?text="+encodeURIComponent(pesan),
 "_blank"
 );
 
